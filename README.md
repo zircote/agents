@@ -1,127 +1,173 @@
-# claude-plugin-template
+# Agents Plugin
 
-A ready-to-fork template for building a **Claude Code “plugin”** using:
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Claude Code Plugin](https://img.shields.io/badge/Claude_Code-Plugin-blueviolet)](https://github.com/anthropics/claude-code)
+[![CI](https://github.com/zircote/agents/actions/workflows/ci.yml/badge.svg)](https://github.com/zircote/agents/actions/workflows/ci.yml)
+[![Version](https://img.shields.io/badge/version-0.6.0-green.svg)](https://github.com/zircote/agents/releases)
 
-- **Claude Code project assets**: `.claude/commands`, `.claude/hooks`, `.claude/settings.json`
-- **MCP server** (Model Context Protocol) in **TypeScript** using stdio transport
-- **Team automation** in `.github/` (CI, templates, Copilot prompts/instructions)
+Comprehensive agent library featuring 115+ specialized Opus 4.5 agents organized by domain, 54 development skills, and powerful exploration and code review commands for enhanced Claude Code workflows.
 
-## Quickstart
-
-```bash
-npm install
-npm run typecheck
-npm run build
-```
-
-Run the MCP server locally:
+## Installation
 
 ```bash
-npm run dev
-# or
-npm run start
+claude plugin install zircote/agents
 ```
 
-## Fork checklist (rename it once)
+## Verify Installation
 
-- Rename the package in `package.json` and the server name/version in `src/index.ts`.
-- Update the `.mcp.json` server key (`mcpServers.<name>`) to match.
-
-## Using with Claude Code (recommended)
-
-1) Build the server:
+After installing, verify the agents and commands are available:
 
 ```bash
-npm run build
+# Test an agent (should return a helpful response)
+claude "Using the python-pro agent, explain Python's GIL in one sentence"
+
+# Verify agent count in Task tool
+claude "List 3 available subagent types from the zircote plugin"
 ```
 
-2) Ensure `.mcp.json` exists at repo root (it does in this template):
+You should see agents like `python-pro`, `frontend-developer`, `code-reviewer` in the Task tool's available subagents.
 
-```json
-{
-  "mcpServers": {
-    "claude-plugin-template": {
-      "type": "stdio",
-      "command": "node",
-      "args": ["dist/index.js"],
-      "env": {}
-    }
-  }
-}
+## Contents
+
+### Agents (115 total)
+
+Specialized agents organized by domain in `agents/`:
+
+| Category | Count | Directory | Examples |
+|----------|-------|-----------|----------|
+| Core Development | 11 | `01-core-development/` | frontend-developer, backend-developer, fullstack-developer, api-designer, mobile-developer, ui-designer |
+| Language Specialists | 23 | `02-language-specialists/` | python-pro, typescript-pro, golang-pro, rust-engineer, java-architect, react-specialist, nextjs-developer, vue-expert |
+| Infrastructure | 12 | `03-infrastructure/` | devops-engineer, sre-engineer, kubernetes-specialist, terraform-engineer, cloud-architect, database-administrator |
+| Quality & Security | 12 | `04-quality-security/` | code-reviewer, security-auditor, penetration-tester, test-automator, performance-engineer, debugger, qa-expert |
+| Data & AI | 12 | `05-data-ai/` | data-scientist, data-engineer, ml-engineer, llm-architect, postgres-pro, prompt-engineer, nlp-engineer |
+| Developer Experience | 10 | `06-developer-experience/` | documentation-engineer, cli-developer, build-engineer, refactoring-specialist, mcp-developer, dx-optimizer |
+| Specialized Domains | 11 | `07-specialized-domains/` | fintech-engineer, blockchain-developer, game-developer, iot-engineer, payment-integration |
+| Business & Product | 10 | `08-business-product/` | product-manager, technical-writer, ux-researcher, scrum-master |
+| Meta Orchestration | 8 | `09-meta-orchestration/` | multi-agent-coordinator, workflow-orchestrator, task-distributor |
+| Research & Analysis | 6 | `10-research-analysis/` | research-analyst, competitive-analyst, market-researcher, trend-analyst |
+| Templates | 1 | `templates/` | Agent creation templates |
+
+### Skills (54 total)
+
+Development skills in `skills/`:
+
+| Category | Skills |
+|----------|--------|
+| **AI/Prompting** | anthropic-prompt-engineer, anthropic-architect, claude-code, prompt-engineer |
+| **Frontend** | frontend-development, frontend-design, aesthetic, ui-styling, canvas-design, web-artifacts-builder, web-frameworks, artifacts-builder |
+| **Backend** | backend-development, databases, devops |
+| **Code Quality** | code-review, debugging (5 sub-skills), problem-solving (6 sub-skills) |
+| **Tools & Utilities** | mcp-builder, changelog-generator, skill-creator, engineer-skill-creator, template-skill, skill-share, repomix, sequential-thinking |
+| **Media** | ai-multimodal, image-enhancer, video-downloader, slack-gif-creator, chrome-devtools |
+| **Business** | brand-guidelines, competitive-ads-extractor, content-research-writer, internal-comms, lead-research-assistant, shopify |
+| **Specialized** | better-auth, datadog-entity-generator, invoice-organizer, file-organizer, python-deprecation-fixer, python-project-skel, raffle-winner-picker, theme-factory, webapp-testing |
+
+### Commands
+
+Located in `commands/`:
+
+| Command | Description |
+|---------|-------------|
+| `/zircote:release` | Prepare and execute a plugin release with version bump, validation, and optional PR creation |
+
+## Agent Format
+
+All agents follow Opus 4.5 best practices:
+
+```yaml
+---
+name: agent-name
+description: >
+  [Role] specialist for [domain]. Use PROACTIVELY when [trigger conditions].
+  [Key capabilities and integration points].
+model: inherit
+tools: Read, Write, Bash, Glob, Grep, [additional-tools]
+---
+
+[Detailed agent instructions including protocols, execution patterns, and output formats]
 ```
 
-3) Add/enable the MCP server in Claude Code.
+## Usage
 
-If you use the CLI, the flow is typically:
+### Via Task Tool (Subagent Delegation)
 
-```bash
-claude mcp add claude-plugin-template -- node dist/index.js
-claude mcp list
+Agents are invoked via the Task tool with `subagent_type`:
+
+```
+Task(subagent_type="frontend-developer", prompt="Build a React component for user authentication")
+Task(subagent_type="security-auditor", prompt="Review this codebase for vulnerabilities")
+Task(subagent_type="python-pro", prompt="Refactor this module using best practices")
 ```
 
-Docs: https://code.claude.com/docs/en/mcp
+### Parallel Execution
 
-## Using with Claude Desktop
+Deploy multiple specialists simultaneously for independent tasks:
 
-Claude Desktop MCP servers are typically configured in `claude_desktop_config.json`.
-Common location (macOS): `~/Library/Application Support/Claude/claude_desktop_config.json`.
-Docs: https://modelcontextprotocol.io/docs/develop/connect-local-servers
+```
+# Parallel: Full-stack feature with security review
+Task(subagent_type="frontend-developer", prompt="Build the UI")
+Task(subagent_type="backend-developer", prompt="Build the API")
+Task(subagent_type="security-auditor", prompt="Review for vulnerabilities")
 
-## What’s included
-
-### 1) MCP server (`src/index.ts`)
-
-This template exposes:
-- Tool: `hello({ name })` → returns “Hello, <name>!”
-- Resource: `template://readme`
-
-Add more tools/resources in `src/index.ts`.
-
-### 2) Claude Code commands (`.claude/commands/*`)
-
-Examples included:
-- `/setup` – install + build sanity check
-- `/mcp [dev|build|start]` – run the MCP server
-- `/github:pr-review <owner/repo#PR>` – review a PR with `gh`
-
-Reminder: nested folders create namespaces, e.g. `.claude/commands/github/pr-review.md` ⇒ `/github:pr-review`.
-Docs: https://code.claude.com/docs/en/slash-commands
-
-### 3) Claude Code hooks (`.claude/settings.json` + `.claude/hooks/*`)
-
-This template includes a minimal **PreToolUse** Bash guard hook that blocks obviously-dangerous shell commands.
-Docs: https://code.claude.com/docs/en/hooks
-
-### 4) “Skills” (`skills/*`)
-
-Put durable team guidance here: conventions, how-to, runbooks.
-
-### 5) GitHub automation (`.github/*`)
-
-- CI (`.github/workflows/ci.yml`) runs `npm ci`, `typecheck`, `build`.
-- Issue templates + PR template.
-- Copilot instructions and reusable prompts.
-
-## Developing new features
-
-### Add a new MCP tool
-
-1) Add `server.tool(...)` in `src/index.ts`.
-2) Run:
-
-```bash
-npm run typecheck
-npm run build
+# Sequential: Research then implement
+research = Task(subagent_type="research-analyst", prompt="Research best practices for X")
+# Then use findings to guide implementation
+Task(subagent_type="python-pro", prompt="Implement based on research: {research}")
 ```
 
-### Add a new slash command
+### CLAUDE.md References
 
-Create: `.claude/commands/<name>.md`
+Reference agents in your project's CLAUDE.md for automatic routing:
 
-Use YAML frontmatter to set `description` and restrict tools via `allowed-tools`.
+```markdown
+## Agent Preferences
 
-## Security checklist
+- Use `frontend-developer` for React/TypeScript work
+- Use `python-pro` for Python implementation
+- Use `code-reviewer` before merging PRs
+```
 
-- Never commit tokens or API keys.
-- Prefer `env` entries in `.mcp.json` and local overrides in `.claude/settings.local.json`.
-- Keep hooks fail-open unless you’re confident about payload compatibility.
+## Templates
+
+Agent templates in `agents/templates/` provide starting points for creating new agents following Opus 4.5 conventions.
+
+## File Structure
+
+```
+agents/
+├── .claude-plugin/
+│   └── plugin.json
+├── agents/
+│   ├── 01-core-development/
+│   ├── 02-language-specialists/
+│   ├── 03-infrastructure/
+│   ├── 04-quality-security/
+│   ├── 05-data-ai/
+│   ├── 06-developer-experience/
+│   ├── 07-specialized-domains/
+│   ├── 08-business-product/
+│   ├── 09-meta-orchestration/
+│   ├── 10-research-analysis/
+│   └── templates/
+├── skills/
+│   ├── aesthetic/
+│   ├── ai-multimodal/
+│   ├── anthropic-architect/
+│   └── ... (54 total)
+├── commands/
+│   └── release.md
+├── CHANGELOG.md
+├── LICENSE
+└── README.md
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## License
+
+MIT
