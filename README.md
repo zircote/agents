@@ -5,7 +5,7 @@
 [![CI](https://github.com/zircote/agents/actions/workflows/ci.yml/badge.svg)](https://github.com/zircote/agents/actions/workflows/ci.yml)
 [![Version](https://img.shields.io/badge/version-0.6.0-green.svg)](https://github.com/zircote/agents/releases)
 
-Comprehensive agent library featuring 115+ specialized Opus 4.5 agents organized by domain, 54 development skills, and powerful exploration and code review commands for enhanced Claude Code workflows.
+Comprehensive agent library featuring 115+ specialized Opus 4.5 agents organized by domain, 55 development skills, and powerful exploration and code review commands for enhanced Claude Code workflows.
 
 ## Installation
 
@@ -47,7 +47,7 @@ Specialized agents organized by domain in `agents/`:
 | Research & Analysis | 6 | `10-research-analysis/` | research-analyst, competitive-analyst, market-researcher, trend-analyst |
 | Templates | 1 | `templates/` | Agent creation templates |
 
-### Skills (54 total)
+### Skills (55 total)
 
 Development skills in `skills/`:
 
@@ -58,7 +58,7 @@ Development skills in `skills/`:
 | **Backend** | backend-development, databases, devops |
 | **Code Quality** | code-review, debugging (5 sub-skills), problem-solving (6 sub-skills) |
 | **Tools & Utilities** | mcp-builder, changelog-generator, skill-creator, engineer-skill-creator, template-skill, skill-share, repomix, sequential-thinking |
-| **Media** | ai-multimodal, image-enhancer, video-downloader, slack-gif-creator, chrome-devtools |
+| **Media** | ai-multimodal, image-enhancer, video-downloader, slack-gif-creator, chrome-devtools, svg-graphics |
 | **Business** | brand-guidelines, competitive-ads-extractor, content-research-writer, internal-comms, lead-research-assistant, shopify |
 | **Specialized** | better-auth, datadog-entity-generator, invoice-organizer, file-organizer, python-deprecation-fixer, python-project-skel, raffle-winner-picker, theme-factory, webapp-testing |
 
@@ -153,7 +153,7 @@ agents/
 │   ├── aesthetic/
 │   ├── ai-multimodal/
 │   ├── anthropic-architect/
-│   └── ... (54 total)
+│   └── ... (55 total)
 ├── commands/
 │   └── release.md
 ├── CHANGELOG.md
