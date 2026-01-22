@@ -1,6 +1,6 @@
 {
   "name": "agents",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Comprehensive agent library featuring 115+ specialized Opus 4.5 agents organized by domain",
   "author": {
     "name": "zircote",
