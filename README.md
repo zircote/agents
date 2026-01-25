@@ -168,6 +168,10 @@ agents/
 3. Make your changes
 4. Submit a pull request
 
+## Attribution
+
+[VoltAgent/awesome-claude-code-subagents](https://github.com/VoltAgent/awesome-claude-code-subagents)
+
 ## License
 
 MIT
